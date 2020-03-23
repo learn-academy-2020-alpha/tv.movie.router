@@ -1,53 +1,59 @@
-import React, {Components} from 'react'
+import React, {Component} from 'react'
 import './App.css';
+import TVshows from "./Components/TVshows"
+import tvshows from "./store/tvshows"
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  Switch
 } from "react-router-dom"
-import "./App.css"
 
-import Home from "./Components/Home"
-import TV from "./Components/TV"
-import Details from "./Components/Details"
 
-// class App extends Components {
-//   constructor () {
-//     super()
-//     this.state = {
-      
-//     }
-//   }
-// }
 
-const TVApp = () => {
+class App extends Component {
+  constructor () {
+    super()
+    this.state = {
+      allShows: tvshows
+    }
+  }
+
+render (){
   return (
+    <React.Fragment>
       <Router>
           <div>
-              <h1>Fav TV Shows</h1>
-              
-              <nav>
-                  <ul>
-                  <li>
-                      
-                      <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                      <Link to="/TV/">TV</Link>
-                  </li>
-                  <li>
-                      <Link to="/Details">Details</Link>
-                  </li>
-                  </ul>
+            <h1>Fav TV Shows</h1>
+            <nav>
+            <ul>
+               { this.state.allShows.map((tvshow, index) =>
+               <li key={ index }>
+                 <Link to={ `/tvshows/${tvshow.id}` }>
+                   { tvshow.name }
+                 </Link>
+               </li>
+               )}
+
+              </ul>
               </nav>
-                <Route path="/" exact components={ Home } />
-                <Route path="/TV/" exact components={ TV } />
-                <Route path="/Details/" exact components={ Details } />
+
+              <Switch>
+                  <Route
+                    path="/tvshows/:id"
+                    render={ (props) => <TVshows {...props} TVshows={ this.state.allShows } /> }
+                  />
+              </Switch>
+
+
+
             </div>
         </Router>
+        </React.Fragment>
     )
+  }
 }
 
 
 
-export default TVApp;
+export default App;
